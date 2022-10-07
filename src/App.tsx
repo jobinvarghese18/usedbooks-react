@@ -2,7 +2,7 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/home';
 import React from 'react';
-import { Header } from './components/AppLayer/3-organisms/Header';
+import { Header } from './components/3-organisms/Header';
 
 const App: React.FC = () => {
   return (
