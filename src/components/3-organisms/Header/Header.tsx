@@ -1,10 +1,15 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import tw from 'twin.macro';
 import { Label } from '../../1-organisms/Label';
 
 export const Header: React.FC = () => {
   const router = useNavigate();
+  const location = useLocation();
+
+  if (location.pathname === '/sign-in' || location.pathname === '/sign-up') {
+    return null;
+  }
   return (
     <Container
       onClick={() => {
