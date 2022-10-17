@@ -21,6 +21,7 @@ export const SignInForm: React.FC = () => {
       response = await loginApi(state);
       if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
         message.success({ content: 'Login successful', key, duration: 2 });
+        router('/home');
       } else {
         message.error({ content: response?.error, key, duration: 2 });
       }
