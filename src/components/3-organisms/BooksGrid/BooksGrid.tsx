@@ -9,9 +9,9 @@ export const BooksGrid: React.FC = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await getBooksApi();
-        console.log(response);
-
+        const token = sessionStorage.getItem('token');
+        console.log(token);
+        const response = await getBooksApi(String(token));
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
           setBooks(response.data);
         }

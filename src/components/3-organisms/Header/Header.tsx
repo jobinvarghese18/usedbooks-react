@@ -43,7 +43,8 @@ export const Header: React.FC = () => {
 
     let response;
     try {
-      response = await createBookApi(state);
+      const token = sessionStorage.getItem('token');
+      response = await createBookApi(state, String(token));
       if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
         message.success({
           content: 'Created successfully.',

@@ -20,7 +20,7 @@ interface appProvidersProps {
 const reducer = (state: User = initialState, action: ActionType): User => {
   switch (action.type) {
     case 'ADD_USER': {
-      return { ...state };
+      return { ...action.payload };
     }
     default: {
       return initialState;

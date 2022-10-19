@@ -45,21 +45,26 @@ export const registerApi: (body: Register) => any = async (body) => {
     });
 };
 
-export const getBooksApi: () => Promise<{ data: Book[] }> = async () => {
+export const getBooksApi: (token: string) => Promise<{ data: Book[] }> = async (
+  token: string
+) => {
   return await Axios({
     method: 'GET',
     url: `/book`,
-    headers: {},
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
   });
 };
 
-export const createBookApi: (body: Book) => Promise<{ data: any }> = async (
-  body
-) => {
+export const createBookApi: (
+  body: Book,
+  token: string
+) => Promise<{ data: any }> = async (body, token) => {
   return await Axios({
     method: 'POST',
     url: '/book',
-    headers: {},
+    headers: { authorization: `Bearer ${token}` },
     data: body,
   });
 };

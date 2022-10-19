@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import { Form, Button, Input, Checkbox, message } from 'antd';
 import { loginApi } from '../../../lib/api/API';
-
+import { AppContext } from '../../../context/appContext';
 export const SignInForm: React.FC = () => {
   const router = useNavigate();
   const [state, setState] = useState({ email: '', password: '' });
-
+  const { dispatch } = useContext(AppContext);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -20,6 +20,8 @@ export const SignInForm: React.FC = () => {
     try {
       response = await loginApi(state);
       if (response.code !== 'ERR_BAD_REQUEST') {
+        dispatch({ type: 'ADD_USER', payload: response });
+        sessionStorage.setItem('token', response.token);
         message.success({ content: 'Login successful', key, duration: 2 });
         router('/home');
       }
