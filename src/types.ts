@@ -11,3 +11,10 @@ export interface Book {
   author: string;
   category: string;
 }
+
+export interface User {
+  name: string;
+  email: string;
+  phone: string;
+  id: number;
+}

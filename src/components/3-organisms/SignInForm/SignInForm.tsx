@@ -19,16 +19,20 @@ export const SignInForm: React.FC = () => {
     let response;
     try {
       response = await loginApi(state);
-      if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
+      if (response.code !== 'ERR_BAD_REQUEST') {
         message.success({ content: 'Login successful', key, duration: 2 });
         router('/home');
-      } else {
-        message.error({ content: response?.error, key, duration: 2 });
       }
     } catch (error) {
       console.log(error);
     }
-    console.log(response, 'response');
+    if (response.code === 'ERR_BAD_REQUEST') {
+      message.error({
+        content: response?.response.statusText,
+        key,
+        duration: 2,
+      });
+    }
     return null;
   };
   return (

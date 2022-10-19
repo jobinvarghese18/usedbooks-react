@@ -26,7 +26,7 @@ export const loginApi: (body: {
       return res.data;
     })
     .catch((error) => {
-      console.log(error);
+      return error;
     });
 };
 
