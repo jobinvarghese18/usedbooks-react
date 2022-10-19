@@ -10,7 +10,6 @@ export const BooksGrid: React.FC = () => {
     (async () => {
       try {
         const token = sessionStorage.getItem('token');
-        console.log(token);
         const response = await getBooksApi(String(token));
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
           setBooks(response.data);
