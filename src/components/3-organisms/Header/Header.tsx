@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import tw from 'twin.macro';
 import { createBookApi } from '../../../lib/api/API';
@@ -6,6 +6,8 @@ import { Label } from '../../1-atoms/Label';
 import { Modal } from '../../2-molecules/Modal/Modal';
 import { TradeBookForm } from '../TradeBookForm';
 import { message } from 'antd';
+import { BookContext } from '../../../context/bookContext';
+import { AppContext } from '../../../context/appContext';
 export interface BookState {
   name: string;
   title: string;
@@ -22,6 +24,9 @@ export const Header: React.FC = () => {
   const router = useNavigate();
   const location = useLocation();
   const [openTradeModal, setOpenTradeModal] = useState<boolean>(false);
+  const { dispatch } = useContext(BookContext);
+  const { state: user } = useContext(AppContext);
+
   const [state, setState] = useState<BookState>({
     name: '',
     title: '',
@@ -46,14 +51,19 @@ export const Header: React.FC = () => {
     let response;
     try {
       const token = sessionStorage.getItem('token');
-      response = await createBookApi(state, String(token));
+      response = await createBookApi(
+        { ...state, owner_id: user.id },
+        String(token)
+      );
       if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
+        dispatch({ type: 'ADD_BOOK', payload: [response.data] });
         message.success({
           content: 'Created successfully.',
           key,
           duration: 2,
         });
-        router(0);
+        console.log(response, 'res');
+        // router(0);
       } else {
         message.error({
           content: 'Error',

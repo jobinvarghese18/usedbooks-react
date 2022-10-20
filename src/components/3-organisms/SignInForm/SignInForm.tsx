@@ -20,7 +20,8 @@ export const SignInForm: React.FC = () => {
     try {
       response = await loginApi(state);
       if (response.code !== 'ERR_BAD_REQUEST') {
-        dispatch({ type: 'ADD_USER', payload: response });
+        const { token, ...userData } = response;
+        dispatch({ type: 'ADD_USER', payload: userData });
         sessionStorage.setItem('token', response.token);
         message.success({ content: 'Login successful', key, duration: 2 });
         router('/home');

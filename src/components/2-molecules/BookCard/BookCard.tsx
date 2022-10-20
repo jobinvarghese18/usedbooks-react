@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, message } from 'antd';
 import tw from 'twin.macro';
@@ -6,18 +7,23 @@ import { Book } from '../../../types';
 import { StarFilled } from '@ant-design/icons';
 import { updateBookApi } from '../../../lib/api/API';
 import { BuyNowModal } from '../../3-organisms/BuyNowModal/BuyNowModal';
-// import { PaymentGateway } from '../../3-organisms/PaymentGateway';
+import { BookContext } from '../../../context/bookContext';
 
 interface Props {
   data: Book;
 }
 export const BookCard: React.FC<Props> = (props) => {
   const { data } = props;
+  const { dispatch } = useContext(BookContext);
   const [state, setState] = useState(data);
   const [isOpen, setIsOpen] = useState(false);
   const route = useNavigate();
 
   const handleOnClickRating: () => Promise<null> = async () => {
+    if (state.rating === 5) {
+      message.warning({ content: 'Reached max' });
+      return null;
+    }
     setState((prev) => ({ ...prev, rating: prev.rating++ }));
     const key = 'updatable';
     message.loading({ content: 'Loading...', key });
@@ -27,13 +33,14 @@ export const BookCard: React.FC<Props> = (props) => {
       const token = sessionStorage.getItem('token');
       const { id, ...rest } = state;
       response = await updateBookApi(
-        { ...rest, rating: state.rating++ },
+        { ...rest, rating: data.rating + 1 },
         String(id),
         String(token)
       );
       if (response.code !== 'ERR_BAD_REQUEST') {
-        message.success({ content: 'Login successful', key, duration: 2 });
-        route(0);
+        dispatch({ type: 'UPDATE_BOOK', payload: [response.data] });
+        message.success({ content: 'Rated successfully', key, duration: 2 });
+        // route(0);
       }
     } catch (error) {
       console.log(error);
@@ -59,7 +66,8 @@ export const BookCard: React.FC<Props> = (props) => {
           type="default"
           icon={<StarFilled className="text-yellow-300" />}
           className="absolute  right-4 top-4"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             handleOnClickRating();
           }}
         />

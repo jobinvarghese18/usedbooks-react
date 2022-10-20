@@ -10,7 +10,7 @@ const initialState: User = {
 };
 
 interface ActionType {
-  type: 'ADD_USER';
+  type: 'ADD_USER' | 'UPDATE_USER';
   payload: User;
 }
 
@@ -22,6 +22,9 @@ const reducer = (state: User = initialState, action: ActionType): User => {
   switch (action.type) {
     case 'ADD_USER': {
       return { ...action.payload };
+    }
+    case 'UPDATE_USER': {
+      return { ...state, ...action.payload };
     }
     default: {
       return initialState;

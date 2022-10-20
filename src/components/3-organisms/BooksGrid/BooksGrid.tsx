@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import tw from 'twin.macro';
+import { BookContext } from '../../../context/bookContext';
 import { getBooksApi } from '../../../lib/api/API';
-import { Book } from '../../../types';
 import { BookCard } from '../../2-molecules/BookCard/BookCard';
 
 export const BooksGrid: React.FC = () => {
-  const [books, setBooks] = useState<Book[]>();
+  const { state, dispatch } = useContext(BookContext);
   useEffect(() => {
     (async () => {
       try {
         const token = sessionStorage.getItem('token');
         const response = await getBooksApi(String(token));
         if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
-          setBooks(response.data);
+          dispatch({ type: 'ADD_BOOKS', payload: response.data });
         }
       } catch (error) {
         console.log(error);
@@ -21,7 +21,7 @@ export const BooksGrid: React.FC = () => {
   }, []);
   return (
     <Container>
-      {books?.map((item) => {
+      {state?.map((item) => {
         return <BookCard key={item.id} data={item} />;
       })}
     </Container>

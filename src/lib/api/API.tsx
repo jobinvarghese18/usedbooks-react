@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Book } from '../../types';
+import { Book, Order } from '../../types';
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 const Axios = axios.create({
@@ -92,6 +92,18 @@ export const updateBookApi: (
   return await Axios({
     method: 'PUT',
     url: `/book/${id}`,
+    headers: { authorization: `Bearer ${token}` },
+    data: { ...body },
+  });
+};
+
+export const createOrderApi: (body: Order, token: string) => any = async (
+  body,
+  token
+) => {
+  return await Axios({
+    method: 'POST',
+    url: `/order`,
     headers: { authorization: `Bearer ${token}` },
     data: { ...body },
   });

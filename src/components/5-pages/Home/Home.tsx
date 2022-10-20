@@ -2,6 +2,7 @@ import React from 'react';
 import { HeroBanner } from '../../3-organisms/HeroBanner';
 import tw from 'twin.macro';
 import { BooksGrid } from '../../3-organisms/BooksGrid';
+// import { BooksValueProvider } from '../../../context/bookContext';
 export const HomePage: React.FC = () => {
   return (
     <Container>
@@ -12,7 +13,9 @@ export const HomePage: React.FC = () => {
           Explore the collection and shop for books online. You can find your
           favourite literature, novels, storybooks, and more on offer.
         </Text>
+        {/* <BooksValueProvider> */}
         <BooksGrid />
+        {/* </BooksValueProvider> */}
       </BookContainer>
     </Container>
   );

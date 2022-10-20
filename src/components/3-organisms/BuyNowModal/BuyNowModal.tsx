@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import tw from 'twin.macro';
 import { Form, Input, message } from 'antd';
 import { Book } from '../../../types';
 import { Modal } from '../../2-molecules/Modal/Modal';
 import { AppContext } from '../../../context/appContext';
-import { updateUserApi } from '../../../lib/api/API';
+import { createOrderApi, updateUserApi } from '../../../lib/api/API';
 
 interface Props {
   isOpen: boolean;
@@ -19,6 +19,78 @@ export const BuyNowModal: React.FC<Props> = (props) => {
   const { isOpen, data, setIsOpen } = props;
   const { state: user, dispatch } = useContext(AppContext);
   const [state, setState] = useState(user);
+
+  useEffect(() => {
+    setState(user);
+  }, [user]);
+
+  const options = {
+    key: 'rzp_test_9FsOUvZmQdCh6Y',
+    amount: data.price * 100, //  = INR 1
+    name: 'Book store',
+    description: 'Buy book now',
+    image: 'https://cdn.razorpay.com/logos/7K3b6d18wHwKzL_medium.png',
+    handler: async function (response: { razorpay_payment_id: any }) {
+      const key = 'updatable';
+      message.loading({ content: 'Loading...', key });
+
+      let res;
+      try {
+        const token = sessionStorage.getItem('token');
+        res = await createOrderApi(
+          {
+            transaction_id: response.razorpay_payment_id,
+            address: String(user.address),
+            book_id: data.id,
+            user_id: user.id,
+          },
+          String(token)
+        );
+        if (res.code !== 'ERR_BAD_REQUEST') {
+          dispatch({ type: 'ADD_USER', payload: res.data });
+          message.success({
+            content: 'Order placed successfully',
+            key,
+            duration: 2,
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      if (res.code === 'ERR_BAD_REQUEST') {
+        message.error({
+          content: res?.response.statusText,
+          key,
+          duration: 2,
+        });
+      }
+      setIsOpen(false);
+    },
+    prefill: {
+      name: state.name,
+      contact: state.phone,
+      email: state.email,
+    },
+    notes: {
+      address: 'some address',
+    },
+    theme: {
+      color: '#F37254',
+      hide_topbar: false,
+    },
+  };
+
+  const openPayModal = (options: any): void => {
+    const rzp1 = new (window as any).Razorpay(options);
+    rzp1.open();
+  };
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
   const handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void = (
     e
@@ -35,8 +107,10 @@ export const BuyNowModal: React.FC<Props> = (props) => {
       const token = sessionStorage.getItem('token');
       response = await updateUserApi(user.id, state, String(token));
       if (response.code !== 'ERR_BAD_REQUEST') {
-        dispatch({ type: 'ADD_USER', payload: response.data });
+        dispatch({ type: 'UPDATE_USER', payload: response.data });
+        setIsOpen(false);
         message.success({ content: 'Successfully updated', key, duration: 2 });
+        openPayModal(options);
       }
     } catch (error) {
       console.log(error);

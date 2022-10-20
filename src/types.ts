@@ -7,7 +7,7 @@ export interface Book {
   is_sold: boolean;
   owner_id: number;
   reviews: string;
-  createdAt?: Date;
+  createdAt?: Date | null;
   author: string;
   category: string;
   price: number;
@@ -19,4 +19,11 @@ export interface User {
   phone: string;
   id: number;
   address?: string;
+}
+
+export interface Order {
+  transaction_id: string;
+  user_id: number;
+  book_id: number | undefined;
+  address: string;
 }
