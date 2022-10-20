@@ -28,7 +28,6 @@ interface bookProvidersProps {
 }
 
 const reducer = (state: Book[] = initialState, action: ActionType): Book[] => {
-  console.log(action, 'action');
   switch (action.type) {
     case 'ADD_BOOKS': {
       return [...action.payload];
