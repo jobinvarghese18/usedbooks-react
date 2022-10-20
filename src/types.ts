@@ -10,6 +10,7 @@ export interface Book {
   createdAt?: Date;
   author: string;
   category: string;
+  price: number;
 }
 
 export interface User {

@@ -29,6 +29,13 @@ export const TradeBookForm: React.FC<Props> = (props) => {
             onChange={handleChange}
           />
         </Form.Item>
+        <Form.Item label="Price" className="font-sans font-semibold">
+          <Input
+            placeholder="Enter price"
+            name="price"
+            onChange={handleChange}
+          />
+        </Form.Item>
         <Form.Item label="Description" className="font-sans font-semibold">
           <Input
             placeholder="Enter description"

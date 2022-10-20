@@ -16,6 +16,7 @@ export interface BookState {
   author: string;
   rating: number;
   reviews: string;
+  price: number;
 }
 export const Header: React.FC = () => {
   const router = useNavigate();
@@ -31,6 +32,7 @@ export const Header: React.FC = () => {
     author: '',
     rating: 2.0,
     reviews: '',
+    price: 0,
   });
 
   const handleOpenTrade: () => void = () => {

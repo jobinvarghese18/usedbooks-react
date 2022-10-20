@@ -68,3 +68,16 @@ export const createBookApi: (
     data: body,
   });
 };
+
+export const updateBookApi: (
+  body: any,
+  id: string,
+  token: string
+) => any = async (body, id, token) => {
+  return await Axios({
+    method: 'PUT',
+    url: `/book/${id}`,
+    headers: { authorization: `Bearer ${token}` },
+    data: { ...body },
+  });
+};
