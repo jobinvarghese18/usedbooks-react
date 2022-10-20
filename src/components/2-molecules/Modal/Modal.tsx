@@ -17,7 +17,7 @@ export const Modal: React.FC<Props> = (props) => {
         title={title}
         centered
         open={isOpen}
-        onOk={() => {
+        onOk={(e) => {
           onOkHandle();
         }}
         onCancel={() => setOpen(false)}

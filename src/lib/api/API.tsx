@@ -45,6 +45,21 @@ export const registerApi: (body: Register) => any = async (body) => {
     });
 };
 
+export const updateUserApi: (
+  id: number,
+  body: any,
+  token: string
+) => any = async (id, body, token) => {
+  return await Axios({
+    method: 'PUT',
+    url: `/user/${id}`,
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+    data: body,
+  });
+};
+
 export const getBooksApi: (token: string) => Promise<{ data: Book[] }> = async (
   token: string
 ) => {

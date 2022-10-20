@@ -6,6 +6,7 @@ const initialState: User = {
   email: '',
   phone: '',
   name: '',
+  address: '',
 };
 
 interface ActionType {

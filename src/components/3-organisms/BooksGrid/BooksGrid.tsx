@@ -28,4 +28,4 @@ export const BooksGrid: React.FC = () => {
   );
 };
 
-const Container = tw.div`flex flex-row flex-wrap px-20 gap-12`;
+const Container = tw.div`flex flex-row flex-wrap px-20 gap-7`;

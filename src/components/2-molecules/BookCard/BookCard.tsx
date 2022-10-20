@@ -6,7 +6,7 @@ import { Book } from '../../../types';
 import { StarFilled } from '@ant-design/icons';
 import { updateBookApi } from '../../../lib/api/API';
 import { BuyNowModal } from '../../3-organisms/BuyNowModal/BuyNowModal';
-import { PaymentGateway } from '../../3-organisms/PaymentGateway';
+// import { PaymentGateway } from '../../3-organisms/PaymentGateway';
 
 interface Props {
   data: Book;
@@ -49,61 +49,61 @@ export const BookCard: React.FC<Props> = (props) => {
   };
 
   const handleModal: () => void = () => {
-    setIsOpen((prev) => false);
+    setIsOpen((prev) => !prev);
   };
 
   return (
-    <Container onClick={handleModal}>
-      <Button
-        type="default"
-        icon={<StarFilled className="text-yellow-300" />}
-        className="absolute  right-4 top-4"
-        onClick={() => {
-          handleOnClickRating();
-        }}
-      />
-      <SubContainer>
-        <ImageContainer>
-          <img
-            className="h-full w-full"
-            src={require('../../../asset/bookImage.png')}
-            alt=""
-          />
-        </ImageContainer>
-        <Text className="text-xl font-semibold">{data.title}</Text>
-        <Text className="text-sm">{data.author}</Text>
-        <InfoContainer>
-          <RatingContainer>
-            <Text className="font-semibold">Rating : </Text> ⭐ {data.rating}.0
-          </RatingContainer>
-          <CategoryContainer>
-            <Text className="font-semibold pr-1"> {`Category : `}</Text>
-            {data.category}
-          </CategoryContainer>
-          {data.price !== 0 && data.price !== null && (
-            <Text className="flex font-semibold">
-              {`Price : `} <Text> {data.price}$</Text>
-            </Text>
-          )}
-        </InfoContainer>
-        <Text className="w-full pt-3 flex flex-col items-start">
-          <Text className="font-semibold">Description : </Text>{' '}
-          {data.description.length >= 130
-            ? `${data.description.slice(0, 130)}...`
-            : data.description}
-        </Text>
-      </SubContainer>
+    <>
+      <Container onClick={handleModal}>
+        <Button
+          type="default"
+          icon={<StarFilled className="text-yellow-300" />}
+          className="absolute  right-4 top-4"
+          onClick={() => {
+            handleOnClickRating();
+          }}
+        />
+        <SubContainer>
+          <ImageContainer>
+            <img
+              className="h-full w-full"
+              src={require('../../../asset/bookImage.png')}
+              alt=""
+            />
+          </ImageContainer>
+          <Text className="text-xl font-semibold">{data.title}</Text>
+          <Text className="text-sm">{data.author}</Text>
+          <InfoContainer>
+            <RatingContainer>
+              <Text className="font-semibold">Rating : </Text> ⭐ {data.rating}
+              .0
+            </RatingContainer>
+            <CategoryContainer>
+              <Text className="font-semibold pr-1"> {`Category : `}</Text>
+              {data.category}
+            </CategoryContainer>
+            {data.price !== 0 && data.price !== null && (
+              <Text className="flex font-semibold">
+                {`Price : `} <Text> {data.price}$</Text>
+              </Text>
+            )}
+          </InfoContainer>
+          <Text className="w-full pt-3 flex flex-col items-start">
+            <Text className="font-semibold">Description : </Text>{' '}
+            {data.description.length >= 130
+              ? `${data.description.slice(0, 130)}...`
+              : data.description}
+          </Text>
+        </SubContainer>
 
-      <BtnContainer>
-        <PaymentGateway data={data} />
-      </BtnContainer>
-
-      <BuyNowModal isOpen={isOpen} data={data} />
-    </Container>
+        <BtnContainer>{/* <PaymentGateway data={data} /> */}</BtnContainer>
+      </Container>
+      <BuyNowModal isOpen={isOpen} data={data} setIsOpen={setIsOpen} />
+    </>
   );
 };
 
-const Container = tw.div`h-[fit-content] w-[300px] max-h-[490px] min-h-[490px] relative flex flex-col items-center justify-between p-5 bg-gray-100  rounded cursor-pointer shadow-md`;
+const Container = tw.div`h-[fit-content] w-[300px] max-h-[450px] min-h-[450px] relative flex flex-col items-center justify-between p-5 bg-gray-100  rounded cursor-pointer shadow-md`;
 const ImageContainer = tw.div`h-40 w-40 object-contain mb-4`;
 const SubContainer = tw.div`w-full h-[450px] flex flex-col items-center justify-start`;
 const Text = tw.div``;
