@@ -42,14 +42,12 @@ const reducer = (state: Book[] = initialState, action: ActionType): Book[] => {
       return [...state, ...action.payload];
     }
     case 'UPDATE_BOOK': {
-      console.log(action.payload, 'payload');
       const newState = state.map((item) => {
         if (item.id === action.payload[0].id) {
           return action.payload[0];
         }
         return item;
       });
-      console.log(newState, 'new');
       return [...newState];
     }
     default: {

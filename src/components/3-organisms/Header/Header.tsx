@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import tw from 'twin.macro';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 import { createBookApi } from '../../../lib/api/API';
 import { Label } from '../../1-atoms/Label';
 import { Modal } from '../../2-molecules/Modal/Modal';
@@ -8,6 +10,7 @@ import { TradeBookForm } from '../TradeBookForm';
 import { message } from 'antd';
 import { BookContext } from '../../../context/bookContext';
 import { AppContext } from '../../../context/appContext';
+
 export interface BookState {
   name: string;
   title: string;
@@ -20,6 +23,20 @@ export interface BookState {
   reviews: string;
   price: number;
 }
+
+const tradeBookSchema = Yup.object().shape({
+  name: Yup.string().required(),
+  title: Yup.string().required(),
+  description: Yup.string().required(),
+  category: Yup.string().required(),
+  is_sold: Yup.boolean().required(),
+  owner_id: Yup.number().required(),
+  author: Yup.string().required(),
+  rating: Yup.number().required(),
+  reviews: Yup.string().nullable(),
+  price: Yup.number().required().min(1),
+});
+
 export const Header: React.FC = () => {
   const router = useNavigate();
   const location = useLocation();
@@ -27,7 +44,7 @@ export const Header: React.FC = () => {
   const { dispatch } = useContext(BookContext);
   const { state: user } = useContext(AppContext);
 
-  const [state, setState] = useState<BookState>({
+  const [, setState] = useState<BookState>({
     name: '',
     title: '',
     description: '',
@@ -44,38 +61,53 @@ export const Header: React.FC = () => {
     setOpenTradeModal((prev) => !prev);
   };
 
-  const onOkHandle: () => Promise<void> = async () => {
-    const key = 'updatable';
-    message.loading({ content: 'Loading...', key });
+  const { handleSubmit, handleChange, errors } = useFormik({
+    initialValues: {
+      name: '',
+      title: '',
+      description: '',
+      category: '',
+      is_sold: false,
+      owner_id: 1,
+      author: '',
+      rating: 2.0,
+      reviews: '',
+      price: 0,
+    },
+    validationSchema: tradeBookSchema,
+    onSubmit: async (values) => {
+      const key = 'updatable';
+      message.loading({ content: 'Loading...', key });
 
-    let response;
-    try {
-      const token = sessionStorage.getItem('token');
-      response = await createBookApi(
-        { ...state, owner_id: user.id },
-        String(token)
-      );
-      if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
-        dispatch({ type: 'ADD_BOOK', payload: [response.data] });
-        message.success({
-          content: 'Created successfully.',
-          key,
-          duration: 2,
-        });
-        console.log(response, 'res');
-        // router(0);
-      } else {
-        message.error({
-          content: 'Error',
-          key,
-          duration: 2,
-        });
+      let response;
+      try {
+        const token = sessionStorage.getItem('token');
+        response = await createBookApi(
+          { ...values, owner_id: user.id },
+          String(token)
+        );
+        if (!Object.prototype.hasOwnProperty.call(response, 'error')) {
+          dispatch({ type: 'ADD_BOOK', payload: [response.data] });
+          message.success({
+            content: 'Created successfully.',
+            key,
+            duration: 2,
+          });
+          console.log(response, 'res');
+          // router(0);
+        } else {
+          message.error({
+            content: 'Error',
+            key,
+            duration: 2,
+          });
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-    setOpenTradeModal(false);
-  };
+      setOpenTradeModal(false);
+    },
+  });
 
   if (
     location.pathname === '/sign-in' ||
@@ -95,9 +127,15 @@ export const Header: React.FC = () => {
         isOpen={openTradeModal}
         setOpen={setOpenTradeModal}
         title="Trade your book"
-        onOkHandle={onOkHandle}
+        onOkHandle={async () => {
+          handleSubmit();
+        }}
       >
-        <TradeBookForm setState={setState} />
+        <TradeBookForm
+          setState={setState}
+          handleChange={handleChange}
+          errors={errors}
+        />
       </Modal>
       <LogoContainer>
         <Logo src={require('../../../asset/SVG.png')} />

@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 import { Modal as Mdl } from 'antd';
-
 interface Props {
   isOpen: boolean;
   setOpen: (flag: boolean) => void;
