@@ -17,7 +17,7 @@ export const SignIn: React.FC = () => {
   );
 };
 
-const Container = tw.div`h-[100vh] w-full flex`;
+const Container = tw.div`h-[100vh] w-full flex overflow-hidden`;
 const LeftContainer = tw.div`w-2/5 flex flex-col justify-center relative bg-[#5C60F5]`;
 const TextContainer = tw.div`px-40`;
 const Heading = tw.span`text-white text-4xl p-0 font-sans font-medium block mb-4`;

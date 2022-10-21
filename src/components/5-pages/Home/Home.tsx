@@ -21,6 +21,6 @@ export const HomePage: React.FC = () => {
   );
 };
 
-const Container = tw.div`pb-10`;
+const Container = tw.div`pb-10 h-full`;
 const BookContainer = tw.div``;
 const Text = tw.div`pl-10`;

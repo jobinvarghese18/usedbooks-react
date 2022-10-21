@@ -19,11 +19,14 @@ export const BooksGrid: React.FC = () => {
       }
     })();
   }, []);
+  console.log(state);
   return (
     <Container>
-      {state?.map((item) => {
-        return <BookCard key={item.id} data={item} />;
-      })}
+      {state
+        ?.filter((book) => !book.is_sold)
+        ?.map((item) => {
+          return <BookCard key={item.id} data={item} />;
+        })}
     </Container>
   );
 };

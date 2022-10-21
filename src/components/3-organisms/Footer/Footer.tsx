@@ -1,7 +1,17 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import tw from 'twin.macro';
 
 export const Footer: React.FC = () => {
+  const location = useLocation();
+  if (
+    location.pathname === '/sign-in' ||
+    location.pathname === '/sign-up' ||
+    location.pathname === '/'
+  ) {
+    return null;
+  }
+
   return (
     <Container>
       <BrandNameContainer>

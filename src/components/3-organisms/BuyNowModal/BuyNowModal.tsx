@@ -1,11 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import { Form, Input, message } from 'antd';
 import { Book } from '../../../types';
 import { Modal } from '../../2-molecules/Modal/Modal';
 import { AppContext } from '../../../context/appContext';
-import { createOrderApi, updateUserApi } from '../../../lib/api/API';
+import {
+  createOrderApi,
+  updateBookApi,
+  updateUserApi,
+} from '../../../lib/api/API';
+import { BookContext } from '../../../context/bookContext';
 
 interface Props {
   isOpen: boolean;
@@ -18,8 +24,10 @@ const { TextArea } = Input;
 export const BuyNowModal: React.FC<Props> = (props) => {
   const { isOpen, data, setIsOpen } = props;
   const { state: user, dispatch } = useContext(AppContext);
+  const { dispatch: bookDispatch } = useContext(BookContext);
   const [state, setState] = useState(user);
 
+  const route = useNavigate();
   useEffect(() => {
     setState(user);
   }, [user]);
@@ -46,6 +54,17 @@ export const BuyNowModal: React.FC<Props> = (props) => {
           },
           String(token)
         );
+
+        const result = await updateBookApi(
+          { is_sold: true },
+          String(data.id),
+          String(token)
+        );
+
+        if (result.code !== 'ERR_BAD_REQUEST') {
+          bookDispatch({ type: 'UPDATE_BOOK', payload: [result.data] });
+        }
+
         if (res.code !== 'ERR_BAD_REQUEST') {
           dispatch({ type: 'ADD_USER', payload: res.data });
           message.success({
@@ -53,6 +72,7 @@ export const BuyNowModal: React.FC<Props> = (props) => {
             key,
             duration: 2,
           });
+          route(0);
         }
       } catch (error) {
         console.log(error);
