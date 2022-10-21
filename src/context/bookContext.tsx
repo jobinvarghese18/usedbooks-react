@@ -33,16 +33,9 @@ const reducer = (state: Book[] = initialState, action: ActionType): Book[] => {
       return [...action.payload];
     }
     case 'ADD_BOOK': {
-      console.log(
-        action.payload,
-        'payload',
-        [...state, ...action.payload],
-        'state'
-      );
       return [...state, ...action.payload];
     }
     case 'UPDATE_BOOK': {
-      console.log(action.payload, 'payload');
       const newState = state.map((item) => {
         if (item.id === action.payload[0].id) {
           return action.payload[0];
