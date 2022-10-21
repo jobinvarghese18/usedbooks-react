@@ -1,11 +1,9 @@
 import React from 'react';
 import tw from 'twin.macro';
 import { Form, Input } from 'antd';
-import { BookState } from '../Header/Header';
 import { FormikHandlers, FormikErrors } from 'formik';
 
 interface Props {
-  setState: React.Dispatch<React.SetStateAction<BookState>>;
   handleChange: FormikHandlers['handleChange'];
   errors: FormikErrors<{
     name: string;
@@ -22,14 +20,6 @@ interface Props {
 }
 export const TradeBookForm: React.FC<Props> = (props) => {
   const { handleChange, errors } = props;
-  // const handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void = (
-  //   e
-  // ) => {
-  //   setState((prev: BookState) => ({
-  //     ...prev,
-  //     [e.target.name]: e.target.value,
-  //   }));
-  // };
 
   return (
     <Container>

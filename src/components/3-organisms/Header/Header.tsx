@@ -44,19 +44,6 @@ export const Header: React.FC = () => {
   const { dispatch } = useContext(BookContext);
   const { state: user } = useContext(AppContext);
 
-  const [, setState] = useState<BookState>({
-    name: '',
-    title: '',
-    description: '',
-    category: '',
-    is_sold: false,
-    owner_id: 1,
-    author: '',
-    rating: 2.0,
-    reviews: '',
-    price: 0,
-  });
-
   const handleOpenTrade: () => void = () => {
     setOpenTradeModal((prev) => !prev);
   };
@@ -132,11 +119,7 @@ export const Header: React.FC = () => {
             handleSubmit();
           }}
         >
-          <TradeBookForm
-            setState={setState}
-            handleChange={handleChange}
-            errors={errors}
-          />
+          <TradeBookForm handleChange={handleChange} errors={errors} />
         </Modal>
         <LogoContainer>
           <Logo src={require('../../../asset/SVG.png')} />
