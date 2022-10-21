@@ -38,7 +38,7 @@ const tradeBookSchema = Yup.object().shape({
 });
 
 export const Header: React.FC = () => {
-  const router = useNavigate();
+  const route = useNavigate();
   const location = useLocation();
   const [openTradeModal, setOpenTradeModal] = useState<boolean>(false);
   const { dispatch } = useContext(BookContext);
@@ -120,38 +120,54 @@ export const Header: React.FC = () => {
   return (
     <Container
       onClick={() => {
-        router('/home');
+        // route('home');
       }}
     >
-      <Modal
-        isOpen={openTradeModal}
-        setOpen={setOpenTradeModal}
-        title="Trade your book"
-        onOkHandle={async () => {
-          handleSubmit();
-        }}
-      >
-        <TradeBookForm
-          setState={setState}
-          handleChange={handleChange}
-          errors={errors}
-        />
-      </Modal>
-      <LogoContainer>
-        <Logo src={require('../../../asset/SVG.png')} />
-      </LogoContainer>
+      <SubContainer>
+        <Modal
+          isOpen={openTradeModal}
+          setOpen={setOpenTradeModal}
+          title="Trade your book"
+          onOkHandle={async () => {
+            handleSubmit();
+          }}
+        >
+          <TradeBookForm
+            setState={setState}
+            handleChange={handleChange}
+            errors={errors}
+          />
+        </Modal>
+        <LogoContainer>
+          <Logo src={require('../../../asset/SVG.png')} />
+        </LogoContainer>
 
-      <NavItems>
-        <Label>Books</Label>
-        <Label onClickHandle={handleOpenTrade}>Trade</Label>
-        <Label>Features</Label>
-        <Label>Support</Label>
-      </NavItems>
+        <NavItems>
+          <Label>Books</Label>
+          <Label onClickHandle={handleOpenTrade}>Trade</Label>
+          <Label>Features</Label>
+          <Label>Support</Label>
+        </NavItems>
+      </SubContainer>
+
+      <LogoutContainer>
+        <Label
+          onClickHandle={() => {
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('userId');
+            route('/sign-in');
+          }}
+        >
+          Logout
+        </Label>
+      </LogoutContainer>
     </Container>
   );
 };
 
-const Container = tw.div`h-16 flex items-center border-b-2 border-gray-400`;
+const Container = tw.div`h-20 flex items-center justify-between border-b-2 border-gray-400`;
+const SubContainer = tw.div`h-full flex items-center`;
 const LogoContainer = tw.div`w-12 h-12 object-contain flex items-center mx-10`;
 const Logo = tw.img`w-full h-full`;
-const NavItems = tw.div`flex gap-x-20 pl-32`;
+const NavItems = tw.div`flex gap-x-[70px] pl-32`;
+const LogoutContainer = tw.div`w-40`;

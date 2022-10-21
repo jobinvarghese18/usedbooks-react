@@ -5,6 +5,7 @@ const baseUrl = process.env.REACT_APP_API_BASE_URL;
 const Axios = axios.create({
   baseURL: baseUrl,
 });
+
 interface Register {
   name: string | null;
   email: string | null;
