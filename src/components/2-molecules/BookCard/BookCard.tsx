@@ -30,7 +30,7 @@ export const BookCard: React.FC<Props> = (props) => {
       const token = sessionStorage.getItem('token');
       const { id, ...rest } = state;
       const rating = data.rating + 1;
-
+      console.log({ ...rest, rating });
       response = await updateBookApi(
         { ...rest, rating },
         String(id),
@@ -67,6 +67,7 @@ export const BookCard: React.FC<Props> = (props) => {
           className="absolute  right-4 top-4"
           onClick={(e) => {
             e.stopPropagation();
+            e.preventDefault();
             handleOnClickRating();
           }}
         />

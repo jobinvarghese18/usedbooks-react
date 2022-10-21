@@ -10,7 +10,7 @@ const initialState: Book[] = [
     name: '',
     owner_id: 0,
     price: 0,
-    rating: 2,
+    rating: 0,
     reviews: '',
     title: '',
     createdAt: null,
@@ -42,6 +42,7 @@ const reducer = (state: Book[] = initialState, action: ActionType): Book[] => {
       return [...state, ...action.payload];
     }
     case 'UPDATE_BOOK': {
+      console.log(action.payload, 'payload');
       const newState = state.map((item) => {
         if (item.id === action.payload[0].id) {
           return action.payload[0];
