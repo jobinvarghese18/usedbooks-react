@@ -30,6 +30,7 @@ export const SignInForm: React.FC = () => {
           const { token, ...userData } = response;
           dispatch({ type: 'ADD_USER', payload: userData });
           sessionStorage.setItem('token', response.token);
+          sessionStorage.setItem('userId', response.id);
           message.success({ content: 'Login successful', key, duration: 2 });
           router('/home');
         }

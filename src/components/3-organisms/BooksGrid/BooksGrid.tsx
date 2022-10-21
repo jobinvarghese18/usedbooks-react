@@ -19,7 +19,7 @@ export const BooksGrid: React.FC = () => {
       }
     })();
   }, []);
-  console.log(state);
+
   return (
     <Container>
       {state

@@ -12,6 +12,25 @@ interface Register {
   password: string | null;
 }
 
+export const getUserByIdApi: (id: string, token: string) => any = async (
+  id,
+  token
+) => {
+  return await Axios({
+    method: 'GET',
+    url: `/user/${id}`,
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 export const loginApi: (body: {
   email: string;
   password: string;
