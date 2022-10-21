@@ -22,7 +22,7 @@ export const HomePage: React.FC = () => {
       (async () => {
         const response = await getUserByIdApi(userId, String(userToken));
 
-        const { token, ...userData } = response;
+        const { ...userData } = response;
         dispatch({ type: 'ADD_USER', payload: userData });
       })();
     }

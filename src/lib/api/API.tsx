@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Book, Order } from '../../types';
+import { Book, Order, User } from '../../types';
 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
 const Axios = axios.create({
@@ -12,10 +12,10 @@ interface Register {
   password: string | null;
 }
 
-export const getUserByIdApi: (id: string, token: string) => any = async (
-  id,
-  token
-) => {
+export const getUserByIdApi: (
+  id: string,
+  token: string
+) => Promise<User> = async (id, token) => {
   return await Axios({
     method: 'GET',
     url: `/user/${id}`,
