@@ -29,8 +29,10 @@ export const BookCard: React.FC<Props> = (props) => {
     try {
       const token = sessionStorage.getItem('token');
       const { id, ...rest } = state;
+      const rating = data.rating + 1;
+
       response = await updateBookApi(
-        { ...rest, rating: data.rating + 1 },
+        { ...rest, rating },
         String(id),
         String(token)
       );

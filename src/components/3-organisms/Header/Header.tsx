@@ -70,7 +70,7 @@ export const Header: React.FC = () => {
       is_sold: false,
       owner_id: 1,
       author: '',
-      rating: 2.0,
+      rating: 1.0,
       reviews: '',
       price: 0,
     },
