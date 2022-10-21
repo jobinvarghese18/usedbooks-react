@@ -1,43 +1,52 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
+import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import { Form, Button, Input, Checkbox, message } from 'antd';
+import * as Yup from 'yup';
 import { loginApi } from '../../../lib/api/API';
 import { AppContext } from '../../../context/appContext';
+
+const signInSchema = Yup.object().shape({
+  email: Yup.string().email().required(),
+  password: Yup.string().required(),
+});
+
 export const SignInForm: React.FC = () => {
   const router = useNavigate();
-  const [state, setState] = useState({ email: '', password: '' });
   const { dispatch } = useContext(AppContext);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
 
-  const loginHandle: () => Promise<null> = async () => {
-    const key = 'updatable';
-    message.loading({ content: 'Loading...', key });
+  const { handleSubmit, errors, handleChange } = useFormik({
+    initialValues: { email: '', password: '' },
+    validationSchema: signInSchema,
+    onSubmit: async (values) => {
+      const key = 'updatable';
+      message.loading({ content: 'Loading...', key });
 
-    let response;
-    try {
-      response = await loginApi(state);
-      if (response.code !== 'ERR_BAD_REQUEST') {
-        const { token, ...userData } = response;
-        dispatch({ type: 'ADD_USER', payload: userData });
-        sessionStorage.setItem('token', response.token);
-        message.success({ content: 'Login successful', key, duration: 2 });
-        router('/home');
+      let response;
+      try {
+        response = await loginApi(values);
+        if (response.code !== 'ERR_BAD_REQUEST') {
+          const { token, ...userData } = response;
+          dispatch({ type: 'ADD_USER', payload: userData });
+          sessionStorage.setItem('token', response.token);
+          message.success({ content: 'Login successful', key, duration: 2 });
+          router('/home');
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
-    if (response.code === 'ERR_BAD_REQUEST') {
-      message.error({
-        content: response?.response.statusText,
-        key,
-        duration: 2,
-      });
-    }
-    return null;
-  };
+      if (response.code === 'ERR_BAD_REQUEST') {
+        message.error({
+          content: response?.response.statusText,
+          key,
+          duration: 2,
+        });
+      }
+      return null;
+    },
+  });
+
   return (
     <Container>
       <Form layout="vertical" className="w-80">
@@ -45,29 +54,35 @@ export const SignInForm: React.FC = () => {
           <Input
             placeholder="Enter e-mail"
             name="email"
-            value={state.email}
             onChange={handleChange}
+            status={
+              Object.prototype.hasOwnProperty.call(errors, 'email')
+                ? 'error'
+                : ''
+            }
           />
         </Form.Item>
+
         <Form.Item label="Password" className="font-sans font-semibold">
           <Input
             placeholder="Enter password"
             name="password"
-            value={state.password}
             onChange={handleChange}
+            status={
+              Object.prototype.hasOwnProperty.call(errors, 'password')
+                ? 'error'
+                : ''
+            }
           />
         </Form.Item>
+
         <Form.Item>
           <Checkbox> Keep me logged in</Checkbox>
           <Button
             className="bg-[#5C60F5] w-full"
             type="primary"
             onClick={() => {
-              loginHandle()
-                .then((res) => {
-                  return res;
-                })
-                .catch((err) => console.log(err));
+              handleSubmit();
             }}
           >
             Sign in
