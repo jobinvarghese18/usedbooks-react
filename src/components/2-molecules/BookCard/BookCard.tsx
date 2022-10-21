@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button, message } from 'antd';
 import tw from 'twin.macro';
 import { Book } from '../../../types';
@@ -17,7 +15,6 @@ export const BookCard: React.FC<Props> = (props) => {
   const { dispatch } = useContext(BookContext);
   const [state, setState] = useState(data);
   const [isOpen, setIsOpen] = useState(false);
-  const route = useNavigate();
 
   const handleOnClickRating: () => Promise<null> = async () => {
     if (state.rating === 5) {
@@ -37,10 +34,10 @@ export const BookCard: React.FC<Props> = (props) => {
         String(id),
         String(token)
       );
+
       if (response.code !== 'ERR_BAD_REQUEST') {
         dispatch({ type: 'UPDATE_BOOK', payload: [response.data] });
         message.success({ content: 'Rated successfully', key, duration: 2 });
-        // route(0);
       }
     } catch (error) {
       console.log(error);
@@ -103,8 +100,6 @@ export const BookCard: React.FC<Props> = (props) => {
               : data.description}
           </Text>
         </SubContainer>
-
-        <BtnContainer>{/* <PaymentGateway data={data} /> */}</BtnContainer>
       </Container>
       <BuyNowModal isOpen={isOpen} data={data} setIsOpen={setIsOpen} />
     </>
@@ -118,4 +113,3 @@ const Text = tw.div``;
 const InfoContainer = tw.div`h-[fit-content] w-full pt-3`;
 const RatingContainer = tw.div`flex flex-row`;
 const CategoryContainer = tw.div`flex flex-row`;
-const BtnContainer = tw.div`w-full flex justify-end`;
