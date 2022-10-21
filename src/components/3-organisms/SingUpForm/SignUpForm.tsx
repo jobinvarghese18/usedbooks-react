@@ -51,7 +51,7 @@ export const SignUPForm: React.FC = () => {
       return null;
     },
   });
-  console.log(errors);
+
   return (
     <Container>
       <Form layout="vertical" className="w-80">
