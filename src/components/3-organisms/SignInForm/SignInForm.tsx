@@ -66,6 +66,7 @@ export const SignInForm: React.FC = () => {
 
         <Form.Item label="Password" className="font-sans font-semibold">
           <Input
+            type="password"
             placeholder="Enter password"
             name="password"
             onChange={handleChange}
